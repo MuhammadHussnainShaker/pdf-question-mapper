@@ -5,8 +5,9 @@ import errorHandler from './middlewares/errorHandler.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173'
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }))
+app.use(cors({ origin: CLIENT_URL, credentials: true }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
@@ -21,7 +22,7 @@ app.use((req, res) => {
 // Global error handler
 app.use(errorHandler)
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`PDF Question Mapper server running on port ${PORT}`)
 })
 
