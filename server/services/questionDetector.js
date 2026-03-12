@@ -5,15 +5,13 @@ const QUESTION_PATTERN = /\b(?:Q(?:uestion)?\s*[.(]?\s*(\d+)[)]?)\b/gi
  * Detects which questions start on each PDF page.
  *
  * Rules:
- * - Only records the first occurrence of each question number across all pages.
  * - Question numbers may jump — no inference or filling of gaps.
- * - Returns a Map: pageIndex -> sorted array of question numbers that start on that page.
+ * - Returns a Map: pageIndex -> array of question identifiers (strings) in their appearance order.
  *
  * @param {Array<{ pageIndex: number, items: Array<{ text: string }> }>} pages
- * @returns {Map<number, number[]>} pageIndex -> questionStarts
+ * @returns {Map<number, string[]>} pageIndex -> questionStarts (ids as strings)
  */
 function detectQuestions(pages) {
-  const seenQuestions = new Set()
   const pageQuestions = new Map()
 
   for (const page of pages) {
@@ -25,11 +23,9 @@ function detectQuestions(pages) {
     let match
 
     while ((match = pattern.exec(fullText)) !== null) {
-      const questionNumber = parseInt(match[1], 10)
-
-      if (!seenQuestions.has(questionNumber)) {
-        seenQuestions.add(questionNumber)
-        questionsOnPage.push(questionNumber)
+      const questionId = match[1] ? match[1].trim() : null
+      if (questionId) {
+        questionsOnPage.push(questionId)
       }
     }
 
