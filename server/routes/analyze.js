@@ -54,9 +54,11 @@ function buildPageSummary(printedPageNumbers, pageQuestions) {
     const minQ = Math.min(...questionStarts)
     const maxQ = Math.max(...questionStarts)
 
-    // Use "continue" for the last page that has questions
-    const range =
-      pageIndex === lastPageWithQuestions ? `${minQ}-continue` : `${minQ}-${maxQ}`
+    if (questionStarts.length === 1) {
+      return { printedPage, range: `${minQ}`, questionStarts }
+    }
+
+    const range = `${minQ}-${maxQ}`
 
     return { printedPage, range, questionStarts }
   })
@@ -80,6 +82,8 @@ router.post(
 
     for (const file of files) {
       const { totalPages, pages } = await extractPdfData(file.buffer)
+      console.log('textContent', pages)
+
       const printedPageNumbers = detectPageNumbers(pages)
       const pageQuestions = detectQuestions(pages)
       const { printedPageSequence, pageSummary } = buildPageSummary(
