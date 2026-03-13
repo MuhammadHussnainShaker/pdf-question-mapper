@@ -7,4 +7,4 @@ FR5 — System maps which questions start on which printed page.
 FR6 — System computes min-max range of question numbers per page; returns null if none. 
 FR7 — API returns structured JSON per file (as specified). 
 FR8 — Frontend displays a clean, readable summary per file. 
-FR9 — System must NOT normalize, sort, or infer missing pages/questions. FR10 — No database required.
+FR9 — System must NOT normalize, sort, or infer missing pages/questions. 
