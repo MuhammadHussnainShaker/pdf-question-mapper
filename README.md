@@ -19,7 +19,7 @@ A full-stack MERN web app that analyzes uploaded exam PDFs and returns a structu
 ```bash
 cd server
 npm install
-node app.js
+npm run dev
 ```
 
 ### Client (runs on port 5173)
@@ -70,48 +70,10 @@ Upload one or more PDFs using `multipart/form-data` with field name `files`.
           { "printedPage": 1, "range": null, "questionStarts": [] },
           { "printedPage": 2, "range": "1-5", "questionStarts": [1,2,3,4,5] },
           { "printedPage": 4, "range": "8-10", "questionStarts": [8,9,10] },
-          { "printedPage": 5, "range": "11-continue", "questionStarts": [11] }
+          { "printedPage": 5, "range": "11", "questionStarts": [11] }
         ]
       }
     ]
   }
 }
 ```
-
-## Project Structure
-
-```
-pdf-question-mapper/
-├── client/                        # React + Vite frontend
-│   ├── src/
-│   │   ├── components/
-│   │   │   ├── FileUpload.jsx
-│   │   │   └── ResultSummary.jsx
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── index.html
-│   └── package.json
-│
-├── server/                        # Node/Express backend
-│   ├── routes/
-│   │   └── analyze.js             # POST /api/analyze-pdf
-│   ├── services/
-│   │   ├── pdfExtractor.js        # Raw text + positional extraction via pdfjs-dist
-│   │   ├── pageNumberDetector.js  # Printed page number detection (spatial + regex)
-│   │   └── questionDetector.js    # Question pattern detection (regex)
-│   ├── utils/
-│   │   ├── positionHelper.js      # Spatial zone classification
-│   │   ├── ApiError.js
-│   │   ├── ApiResponse.js
-│   │   └── asyncHandler.js
-│   ├── middlewares/
-│   │   └── errorHandler.js
-│   ├── app.js
-│   └── package.json
-│
-├── Documentation/
-│   └── FunctionalRequirements.md
-└── README.md
-```
-
