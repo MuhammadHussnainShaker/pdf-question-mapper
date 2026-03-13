@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react'
 import axios from 'axios'
 
-const API_URL = 'http://localhost:5000/api/analyze-pdf'
+const API_URL = import.meta.env.VITE_API_URL
 
 function FileUpload({ setResults, setLoading, setError }) {
   const [selectedFiles, setSelectedFiles] = useState([])
