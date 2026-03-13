@@ -1,38 +1,12 @@
 import { getZone } from '../utils/positionHelper.js'
-
-// Patterns for printed page number tokens
-const PAGE_NUMBER_PATTERNS = [
-  /^\d+$/, // plain number: 1, 42
-  /^page\s*\d+$/i, // page prefix: Page 1, page42
-  /^\(\d+\)$/, // parenthesized: (1)
-  /^-\s*\d+\s*-$/, // dashed: - 1 -
-]
-
-/**
- * Extracts the numeric value from a token that matches a page number pattern.
- * Returns null if the token does not match any pattern.
- * @param {string} token
- * @returns {number|null}
- */
-function extractPageNumber(token) {
-  const trimmed = token.trim()
-
-  for (const pattern of PAGE_NUMBER_PATTERNS) {
-    if (pattern.test(trimmed)) {
-      const digits = trimmed.match(/\d+/)
-      if (digits) return parseInt(digits[0], 10)
-    }
-  }
-
-  return null
-}
+import extractPageNumber from './pageNumberExtractor.js'
 
 /**
  * Detects the printed page number for each PDF page.
  *
  * Strategy:
- * 1. Collect all text items in top/bottom zones across all pages.
- * 2. Determine which zone is consistently used for page numbers.
+ * 1. Collect tokens in top/bottom zones across all pages.
+ * 2. Determine the dominant zone (most pages with candidates).
  * 3. Extract numeric values from matching tokens in that zone.
  * 4. Return page numbers in exact PDF page order (null if not detected).
  *
@@ -40,7 +14,6 @@ function extractPageNumber(token) {
  * @returns {Array<number|null>}
  */
 function detectPageNumbers(pages) {
-  // Map: zone -> array of { pageIndex, number } candidates
   const zoneCandidates = {}
 
   for (const page of pages) {
@@ -58,7 +31,7 @@ function detectPageNumbers(pages) {
     }
   }
 
-  // Determine the dominant zone: the one with candidates on the most distinct pages
+  // Determine the dominant zone (most distinct pages)
   const zonePageCounts = {}
   for (const [zone, candidates] of Object.entries(zoneCandidates)) {
     const distinctPages = new Set(candidates.map((c) => c.pageIndex))
@@ -73,7 +46,7 @@ function detectPageNumbers(pages) {
     return pages.map(() => null)
   }
 
-  // Build a map: pageIndex -> printed page number (take the first match per page)
+  // Map first found candidate per page in the dominant zone
   const pageNumberMap = {}
   for (const { pageIndex, number } of zoneCandidates[dominantZone]) {
     if (!(pageIndex in pageNumberMap)) {
@@ -81,7 +54,6 @@ function detectPageNumbers(pages) {
     }
   }
 
-  // Return in exact PDF page order
   return pages.map((page) => pageNumberMap[page.pageIndex] ?? null)
 }
 
