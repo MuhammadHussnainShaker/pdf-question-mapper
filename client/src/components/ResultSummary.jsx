@@ -5,14 +5,19 @@ function PageDetail({ entry }) {
     return (
       <li className='text-gray-500'>
         <span className='font-medium text-gray-700'>Page {printedPage}:</span>{' '}
-        No questions at all
+        No question at all
       </li>
     )
   }
 
+  // When only one distinct question starts on this page, append "-continue" to
+  // indicate the question continues beyond this page (no closing boundary visible).
+  const displayRange = range.includes('-') ? range : `${range}-continue`
+
   return (
     <li className='text-gray-700'>
-      <span className='font-medium'>Page {printedPage}:</span> Question {range}
+      <span className='font-medium'>Page {printedPage}:</span> question{' '}
+      {displayRange}
       {questionStarts.length > 2 ? (
         <span className='text-gray-400 text-xs ml-2'>
           ({`Q${questionStarts.join(', Q')}`})
