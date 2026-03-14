@@ -30,25 +30,6 @@ npm install
 npm run dev
 ```
 
-## Deployment
-
-### Backend → Render Web Service
-
-1. Connect the repo to [Render](https://render.com) and create a **Web Service** pointing to the `server/` directory.
-2. Set the following environment variables in the Render dashboard:
-
-| Variable | Value |
-|---|---|
-| `PORT` | Set automatically by Render — no action needed |
-| `CLIENT_URL` | Your Vercel frontend URL, e.g. `https://your-app.vercel.app` |
-
-3. The server binds to `0.0.0.0` so Render can route external traffic to it.
-
-### Frontend → Vercel
-
-1. Connect the repo to [Vercel](https://vercel.com) and set the **Root Directory** to `client/`.
-2. Add an environment variable (or update `FileUpload.jsx` `API_URL`) pointing to your Render service URL, e.g. `https://your-api.onrender.com/api/analyze-pdf`.
-
 ## API
 
 ### `POST /api/analyze-pdf`
