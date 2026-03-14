@@ -16,7 +16,7 @@ function PageDetail({ entry }) {
 
   return (
     <li className='text-gray-700'>
-      <span className='font-medium'>Page {printedPage}:</span> question{' '}
+      <span className='font-medium'>Page {printedPage}:</span> Question{' '}
       {displayRange}
       {questionStarts.length > 2 ? (
         <span className='text-gray-400 text-xs ml-2'>
